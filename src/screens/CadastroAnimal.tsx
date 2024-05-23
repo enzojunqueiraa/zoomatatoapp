@@ -42,7 +42,7 @@ const CadastroAnimal = () => {
         }
     }
 
-
+,
     return (
        <View style={styles.container}>
         <ScrollView >
