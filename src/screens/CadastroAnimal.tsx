@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         height: 130,
     },
     form: {
-        padding: 10,
+        padding: 18,
         backgroundColor: '#ccd5ae',
         paddingVertical: 30,
     },
