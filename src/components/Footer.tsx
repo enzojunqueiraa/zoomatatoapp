@@ -1,36 +1,59 @@
 import React from "react";
-import { StyleSheet,  Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+
 
 function Footer(): React.JSX.Element {
     return (
-        <View style={styles.footer} >
-        <Text style={styles.footerText} >App Exemplo</Text>
-    </View>
-    );
+        <View style={styles.footer}>
 
+        <TouchableOpacity>
+                <Image
+                    source={require('../assets/images/menu.png')}
+                    style={styles.footerIcon}
+                />
+                </TouchableOpacity>
+                
+            <TouchableOpacity >
+                <Image
+                    source={require('../assets/images/home.png')}
+                    style={styles.footerIcon}
+
+                />
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Image
+                    source={require('../assets/images/profile.png')}
+                    style={styles.footerIcon}
+                />
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Image
+                    source={require('../assets/images/lupa.png')}
+                    style={styles.footerIcon}
+                />
+            </TouchableOpacity>
+        </View>
+    )
 }
+
 const styles = StyleSheet.create({
     menuList: {
         flexGrow: 1
     },
     footer: {
-        borderTopWidth: 0.2,
-        backgroundColor: 'white',
+        borderTopWidth: 1,
+        backgroundColor: '#fefae0', 
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'flex-end',
-        paddingVertical:10
-    },
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        paddingVertical: 15, 
+        paddingHorizontal: 20, 
+        },
     footerIcon: {
-        width: 30,
-        height:30
+        width: 24,
+        height: 24, 
+        margin: 10, 
     },
-    footerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white'
-    }
-    
 });
 
 export default Footer;
