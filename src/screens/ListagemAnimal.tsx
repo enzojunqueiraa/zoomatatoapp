@@ -3,6 +3,8 @@ import { Alert, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, Toucha
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useNavigation } from '@react-navigation/native';
+
 
 interface Animal {
     id: string;
@@ -18,6 +20,7 @@ interface Animal {
 }
 
 function ListagemAnimal(): React.JSX.Element {
+    const navigation = useNavigation(); // Adicionado para acessar a instância de navegação
     const [dados, setDados] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -65,7 +68,7 @@ function ListagemAnimal(): React.JSX.Element {
                             <TouchableOpacity onPress={() => deletarAnimal(item.id)}>
                                 <Image source={require('../assets/images/lixo.png')} style={styles.lixoButton}/>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => deletarAnimal(item.id)}>
+                            <TouchableOpacity onPress={() => navigation.navigate('AtualizacaoAnimal', { id: item.id })}>
                                 <Image source={require('../assets/images/edit.png')} style={styles.editButton}/>
                             </TouchableOpacity>
                         </View>

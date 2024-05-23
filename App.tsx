@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ListagemAnimal from './src/screens/ListagemAnimal';
 import CadastroAnimal from './src/screens/CadastroAnimal';
+import AtualizacaoAnimal from './src/screens/AtualizacaoAnimal';
 
 const Stack = createStackNavigator();
 function App(): React.ReactElement {
@@ -14,7 +15,9 @@ function App(): React.ReactElement {
       
     <Stack.Screen name='CadastroAnimal' component={CadastroAnimal} options={{headerShown: false}}/>
       <Stack.Screen name='ListagemAnimal' component={ListagemAnimal} options={{headerShown: false}}/>
+      <Stack.Screen name='AtualizacaoAnimal' component={AtualizacaoAnimal} options={{headerShown: false}}/>
     </Stack.Navigator>
+
    </NavigationContainer>
 
 
