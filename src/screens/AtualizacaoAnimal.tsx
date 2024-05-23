@@ -3,8 +3,26 @@ import { Alert, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity,
 import axios from 'axios';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-// Supondo que a interface Animal ainda seja relevante para esta página
+// Definindo os tipos para a propriedade de navegação e a rota
+type AnimalNavigatorParamList = {
+  AtualizacaoAnimal: { id: string };
+  // outras telas...
+};
+
+type AtualizacaoAnimalScreenNavigationProp = StackNavigationProp<
+  AnimalNavigatorParamList,
+  'AtualizacaoAnimal'
+>;
+
+type AtualizacaoAnimalScreenRouteProp = RouteProp<
+  AnimalNavigatorParamList,
+  'AtualizacaoAnimal'
+>;
+
+// Interface Animal
 interface Animal {
     id: string;
     nome: string;
@@ -18,7 +36,8 @@ interface Animal {
     habitat: string;
 }
 
-const AtualizacaoAnimal = ({ route }) => {
+// Componente AtualizacaoAnimal
+const AtualizacaoAnimal = ({ route }: { route: AtualizacaoAnimalScreenRouteProp }) => {
     const { id } = route.params; // Recebe o ID do animal a ser atualizado via props
     const [animal, setAnimal] = useState<Animal | null>(null);
     const [nome, setNome] = useState<string>('');
@@ -56,7 +75,7 @@ const AtualizacaoAnimal = ({ route }) => {
     }, [id]);
 
     const atualizarAnimal = async () => {
-        if (!nome ||!idade ||!especie ||!ra ||!peso ||!altura ||!sexo ||!dieta ||!habitat) {
+        if (!nome ||idade ||especie ||ra ||peso ||altura ||sexo ||dieta ||habitat) {
             Alert.alert("Campos Obrigatórios", "Por favor, preencha todos os campos.");
             return;
         }
@@ -106,6 +125,7 @@ const AtualizacaoAnimal = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
     },
@@ -151,7 +171,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 'auto',
     
     },
-    
+
 });
 
 export default AtualizacaoAnimal;
+
+
