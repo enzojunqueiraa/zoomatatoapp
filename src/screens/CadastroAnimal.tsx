@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from "react-native";
 import axios from 'axios';
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+
 
 
 const CadastroAnimal = () => {
@@ -31,7 +33,7 @@ const CadastroAnimal = () => {
             formData.append('dieta', dieta);
             formData.append('habitat', habitat);
 
-            const response = await axios.post('http://10.137.11.226:8000/api/animais/cadastrar', formData, {
+            const response = await axios.post('http://10.137.11.207:8000/api/animais/cadastrar', formData, { //http://10.137.11.226:8000/api/animais/cadastrar
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -42,14 +44,12 @@ const CadastroAnimal = () => {
         }
     }
 
-,
+
     return (
        <View style={styles.container}>
         <ScrollView >
             <StatusBar backgroundColor="black" barStyle="light-content" />
-            <View style={styles.header}>
-                <Image source={logo} style={styles.logo} />
-            </View>
+            <Header />
             <View style={styles.form}>
                 <Text style={styles.fText}>Cadastro de Animais</Text>
                 <TextInput

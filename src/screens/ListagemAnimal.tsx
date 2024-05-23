@@ -1,104 +1,121 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import axios from 'axios';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 interface Animal {
-    id: number;
+    id: string;
     nome: string;
-    idade: number;
+    idade: string;
     especie: string;
     ra: string;
-    peso: string;
-    altura: string;
+    peso: number; 
+    altura: number; 
     sexo: string;
     dieta: string;
     habitat: string;
 }
 
-const ListaAnimais = () => {
-    const [animais, setAnimais] = useState<Animal[]>([]);
+const ListagemAnimal = () => {
+    const [dados, setDados] = useState<any[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchAnimais = async () => {
+        useEffect(() => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('http://10.137.11.226:8000/api/animais/retornarTodos');
-                console.log('Status:', response.status);
-                console.log('Body:', response.data);
-                setAnimais(response.data);
+                const response = await axios.get('http://10.137.11.225:8000/api/animal/todos');
+                console.log('Dados recebidos da API:', response.data);
+                setDados(response.data.data); 
+                console.log("dados da api", dados); 
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    console.error('Request failed with status code', error.response?.status);
-                    console.error('Error message:', error.message);
-                } else {
-                    console.error('An unexpected error occurred:', error);
-                }
+                console.error('Erro ao buscar os dados:', error);
+                setError("Ocorreu um erro ao buscar os bolos"); 
             }
         };
 
-        fetchAnimais();
+        fetchData();
     }, []);
 
-    const renderItem = ({ item }: { item: Animal }) => (
-        <View style={styles.row}>
-            <Text style={[styles.cell, {backgroundColor: '#f0f0f0'}]}>{item.nome}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#e0e0e0'}]}>{item.idade}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#d0d0d0'}]}>{item.especie}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#c0c0c0'}]}>{item.ra}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#b0b0b0'}]}>{item.peso}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#a0a0a0'}]}>{item.altura}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#909090'}]}>{item.sexo}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#808080'}]}>{item.dieta}</Text>
-            <Text style={[styles.cell, {backgroundColor: '#707070'}]}>{item.habitat}</Text>
-        </View>
-    );
+    const renderItem = ({ item }: { item: Animal }) => {
+        return (
+            <View style={styles.itemContainer}>
+                <TouchableOpacity style={styles.item}>
+                    <View style={styles.text}>
+                        <Text style={styles.nome}>{item.nome}</Text>
+                        <Text style={styles.idade}>Idade: {item.idade}</Text>
+                        <Text style={styles.text}>Espécie: {item.especie}</Text>
+                        <Text style={styles.text}>RA: {item.ra}</Text>
+                        <Text style={styles.text}>Peso: {item.peso} kg</Text>
+                        <Text style={styles.text}>Altura: {item.altura} cm</Text> 
+                        <Text style={styles.text}>Sexo: {item.sexo}</Text>
+                        <Text style={styles.text}>Dieta: {item.dieta}</Text>
+                        <Text style={styles.text}>Hábitat: {item.habitat}</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Lista de Animais</Text>
-            <FlatList
-                data={animais}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-            />
+                <StatusBar backgroundColor="black" barStyle='light-content' />
+                <Header />
+                <FlatList
+                    data={dados}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            <Footer />
         </View>
     );
-};
+}
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    item: {
+        backgroundColor: '#606c38',
         padding: 20,
-        backgroundColor: '#fafafa',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    row: {
+        marginVertical: 8,
+        marginHorizontal: 8,
+        borderRadius: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-        paddingBottom: 10,
-        marginBottom: 10,
     },
-    cell: {
+    text: {
+        color:'white',
+        fontWeight: 'bold',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         flex: 1,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#eee',
-        borderRadius: 5,
+    },
+    nome: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 25,
         textAlign: 'center',
     },
-    separator: {
-        height: 1,
-        width: '100%',
-        backgroundColor: '#ddd',
+    idade: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 20,
+        marginBottom: 10,
     },
+    itemContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 8,
+        marginHorizontal: 8,
+    },
+
+
+
 });
 
-export default ListaAnimais;
+export default ListagemAnimal;

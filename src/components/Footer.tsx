@@ -6,20 +6,14 @@ function Footer(): React.JSX.Element {
     return (
         <View style={styles.footer}>
 
-        <TouchableOpacity>
-                <Image
-                    source={require('../assets/images/menu.png')}
-                    style={styles.footerIcon}
-                />
-                </TouchableOpacity>
-                
-            <TouchableOpacity >
+<TouchableOpacity >
                 <Image
                     source={require('../assets/images/home.png')}
                     style={styles.footerIcon}
 
                 />
             </TouchableOpacity>
+
             <TouchableOpacity>
                 <Image
                     source={require('../assets/images/profile.png')}
@@ -32,6 +26,12 @@ function Footer(): React.JSX.Element {
                     style={styles.footerIcon}
                 />
             </TouchableOpacity>
+            <TouchableOpacity>
+                <Image
+                    source={require('../assets/images/menu.png')}
+                    style={styles.footerIcon}
+                />
+                </TouchableOpacity>
         </View>
     )
 }
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between', 
         alignItems: 'center',
-        paddingVertical: 15, 
+        paddingVertical: 10, 
         paddingHorizontal: 20, 
         },
     footerIcon: {
