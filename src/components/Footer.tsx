@@ -24,7 +24,7 @@ function Footer(): React.JSX.Element {
                     style={styles.footerIcon}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ListagemAnimal')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ListagemAnimais')}>
                 <Image source={require('../assets/images/menu.png')}
                     style={styles.footerIcon} />
             </TouchableOpacity>

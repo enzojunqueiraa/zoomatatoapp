@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useNavigation } from '@react-navigation/native';
-
 
 interface Animal {
     id: string;
@@ -12,26 +11,26 @@ interface Animal {
     idade: string;
     especie: string;
     ra: string;
-    peso: number; 
-    altura: number; 
+    peso: number;
+    altura: number;
     sexo: string;
     dieta: string;
     habitat: string;
 }
 
-function ListagemAnimal(): React.JSX.Element {
-    const navigation = useNavigation(); // Adicionado para acessar a instância de navegação
+const ListagemAnimal = () => {
     const [dados, setDados] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [pesquisaAnimal, setPesquisaAnimal] = useState("");
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://10.137.11.207:8000/api/animais/retornarTodos');
+            const response = await axios.get('http://10.137.11.226:8000/api/animais/retornarTodos');
             console.log('Dados recebidos da API:', response.data);
             setDados(response.data.data);
         } catch (error) {
             console.error('Erro ao buscar os dados:', error);
-            setError("Ocorreu um erro ao buscar os bolos");
+            setError("Ocorreu um erro ao buscar os animais");
         }
     };
 
@@ -41,12 +40,37 @@ function ListagemAnimal(): React.JSX.Element {
 
     const deletarAnimal = async (id: string) => {
         try {
-            await axios.delete(`http://10.137.11.207:8000/api/animais/excluir/${id}`);
+            await axios.delete(`http://10.137.11.226:8000/api/animais/excluir/${id}`);
             Alert.alert("Sucesso!", "Animal deletado com sucesso.");
             fetchData(); 
         } catch (error) {
             console.error(error);
             Alert.alert("Erro!", "Ocorreu um erro ao deletar o animal.");
+        }
+    };
+
+    const navigation = useNavigation();
+
+    const editarAnimais = (animal: Animal)=>{
+        navigation.navigate('EditarAnimais', {animal});
+    }
+
+    const buscarAnimal = async () => {
+        try {
+            const response = await axios.post('http://10.137.11.226:8000/api/animais/pesquisarPorNome', { nome: pesquisaAnimal }, {
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            });
+            if (response.data.status === true) {
+                setDados(response.data.data);
+            } else {
+                setDados([]);
+                Alert.alert("Atenção", "Nenhum animal encontrado.");
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -60,16 +84,17 @@ function ListagemAnimal(): React.JSX.Element {
                         <Text style={styles.text}>Espécie: {item.especie}</Text>
                         <Text style={styles.text}>RA: {item.ra}</Text>
                         <Text style={styles.text}>Peso: {item.peso} kg</Text>
-                        <Text style={styles.text}>Altura: {item.altura} cm</Text> 
+                        <Text style={styles.text}>Altura: {item.altura} cm</Text>
                         <Text style={styles.text}>Sexo: {item.sexo}</Text>
                         <Text style={styles.text}>Dieta: {item.dieta}</Text>
-                        <Text style={styles.text}>Hábitat: {item.habitat}</Text>
-                        <View style={styles.buttonGroup}>
-                            <TouchableOpacity onPress={() => deletarAnimal(item.id)}>
-                                <Image source={require('../assets/images/lixo.png')} style={styles.lixoButton}/>
+                        <Text style={styles.text}>Habitat: {item.habitat}</Text>
+
+                        <View style ={styles.actions}>
+                            <TouchableOpacity onPress={() => editarAnimais(item)}>
+                                <Image source={require('../assets/images/edit.png')} style={styles.updateIcon} />  
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('AtualizacaoAnimal', { id: item.id })}>
-                                <Image source={require('../assets/images/edit.png')} style={styles.editButton}/>
+                            <TouchableOpacity onPress={() => deletarAnimal(item.id)}>
+                                <Image source={require('../assets/images/lixo.png')} style={styles.deleteIcon} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -80,13 +105,25 @@ function ListagemAnimal(): React.JSX.Element {
 
     return (
         <View style={styles.container}>
-                <StatusBar backgroundColor="black" barStyle='light-content' />
-                <Header />
-                <FlatList
-                    data={dados}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
+            <StatusBar backgroundColor="black" barStyle='light-content' />
+            <Header />
+            <View style={{ padding: 10 }}>
+                <TextInput
+                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    onChangeText={setPesquisaAnimal}
+                    value={pesquisaAnimal}
+                    placeholder="Pesquisar animal..."
+                    onEndEditing={buscarAnimal} 
+                    onChangeText={(text) => {
+                        setPesquisaAnimal(text);
+                    }}
                 />
+            </View>
+            <FlatList
+                data={dados}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
+            />
             <Footer />
         </View>
     );
@@ -107,7 +144,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        color:'white',
+        color: 'white',
         fontWeight: 'bold',
         flexDirection: 'column',
         alignItems: 'center',
@@ -133,19 +170,21 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 8,
     },
-    buttonGroup: {
+    actions: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginTop: 10,  // Espaçamento no topo
+        marginTop: 10,
     },
-    lixoButton: {
-        width: 30,
-        height: 30,
+    deleteIcon: {
+        width: 30, 
+        height: 30, 
+        marginRight: 10, 
     },
-    editButton: {
-        width: 30,
-        height: 30,
-    },
+    updateIcon: {
+        width: 30, 
+        height: 30, 
+        marginRight: 10, 
+    }
 });
 
 export default ListagemAnimal;
