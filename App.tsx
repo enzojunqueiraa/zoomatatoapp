@@ -1,6 +1,5 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CadastroAnimal from './src/screens/CadastroAnimal';

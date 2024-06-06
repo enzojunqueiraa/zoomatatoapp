@@ -3,6 +3,10 @@ import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, 
 import axios from 'axios';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useNavigation } from '@react-navigation/native';
+
+
+
 
 
 
@@ -19,7 +23,7 @@ const CadastroAnimal = () => {
     const [habitat, setHabitat] = useState<string>('');
 
     const logo = require('../assets/images/logo.png');
-    
+    const navigation = useNavigation();
 
     const cadastrarAnimal = async () => {
         try {
@@ -40,6 +44,17 @@ const CadastroAnimal = () => {
                 }
             });
             console.log(response.data);
+            setNome('');
+            setIdade('');
+            setEspecie('');
+            setRa('');
+            setPeso('');
+            setAltura('');
+            setSexo('');
+            setDieta('');
+            setHabitat('');
+            
+            navigation.navigate('ListagemAnimais'); 
         } catch (error) {
             console.log(error);
         }
@@ -55,40 +70,49 @@ const CadastroAnimal = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Nome do Animal"
+                    value={nome}
                     onChangeText={setNome} />
                 <TextInput
                     style={styles.input}
                     placeholder="Idade"
+                    value={idade}
                     onChangeText={setIdade} />
                 <TextInput
                     style={styles.input}
                     placeholder="Espécie"
-                    onChangeText={setEspecie} />
+                    value={especie}
+                    onChangeText={setEspecie}/>
                 <TextInput
                     style={styles.input}
                     placeholder="RA"
+                    value={ra}
                     onChangeText={setRa} />
                 <TextInput
                     style={styles.input}
                     placeholder="Peso em Kg"
                     keyboardType="decimal-pad"
+                    value={peso}
                     onChangeText={setPeso} />
                 <TextInput
                     style={styles.input}
                     placeholder="Altura em Cm"
                     keyboardType="decimal-pad"
+                    value={altura}
                     onChangeText={setAltura} />
                 <TextInput
                     style={styles.input}
                     placeholder="Sexo"
+                    value={sexo}
                     onChangeText={setSexo} />
                 <TextInput
                     style={styles.input}
                     placeholder="Dieta"
+                    value={dieta}
                     onChangeText={setDieta} />
                 <TextInput
                     style={styles.input}
                     placeholder="Habitat"
+                    value={habitat}
                     onChangeText={setHabitat} />
 
                 <TouchableOpacity style={styles.imageButton} onPress={cadastrarAnimal}>
