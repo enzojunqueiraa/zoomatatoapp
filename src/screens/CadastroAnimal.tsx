@@ -19,6 +19,7 @@ const CadastroAnimal = () => {
     const [habitat, setHabitat] = useState<string>('');
 
     const logo = require('../assets/images/logo.png');
+    
 
     const cadastrarAnimal = async () => {
         try {
@@ -32,8 +33,8 @@ const CadastroAnimal = () => {
             formData.append('sexo', sexo);
             formData.append('dieta', dieta);
             formData.append('habitat', habitat);
-
-            const response = await axios.post('http://10.137.11.226:8000/api/animais/cadastrar', formData, { //http://10.137.11.226:8000/api/animais/cadastrar
+    
+            const response = await axios.post('http://10.137.11.226:8000/api/animais/cadastrar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -42,9 +43,8 @@ const CadastroAnimal = () => {
         } catch (error) {
             console.log(error);
         }
-    }
-
-
+    };
+    
     return (
        <View style={styles.container}>
         <ScrollView >
